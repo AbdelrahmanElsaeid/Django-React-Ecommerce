@@ -13,10 +13,10 @@ const useAuthStore = create((set, get) => ({
     
     setUser: (user) => set({ allUserData: user }),
     setLoading: (loading) => set({ loading }),
-    setLoggedIn: () => get().allUserData !== null,
+    isLoggedIn: () => get().allUserData !== null,
 }))
 
-if(import.meta.evn.DEV) {
+if(import.meta.env.DEV) {
     mountStoreDevtool('Store', useAuthStore)
 }
 
