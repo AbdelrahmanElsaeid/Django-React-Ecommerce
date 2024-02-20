@@ -7,7 +7,7 @@ import Cookies from "js-cookie"
 
 export const login = async (email, password) => {
     try {
-        const { data, status } = await axios.post("user/token/", {
+        const { data, status } = await axios.post("http://127.0.0.1:8000/api/v1/user/token/", {
             email,
             password
         })
@@ -26,7 +26,7 @@ export const login = async (email, password) => {
 
 export const register = async (full_name, email, phone, password, password2) => {
     try {
-        const { data } = await axios.post('user/register/', {
+        const { data } = await axios.post('http://127.0.0.1:8000/api/v1/user/register/', {
             full_name,
             email,
             phone,
