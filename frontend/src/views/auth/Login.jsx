@@ -52,6 +52,8 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             />
+            <br />
+            <br />
              <input 
             type="password" 
             name='password'
@@ -59,8 +61,12 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             />
+            <br />
+            <br />
 
             <button type='submit'>Login</button>
+            <hr />
+            <Link to={'/forget-password'}> Forget Password</Link>
         </form>
     </div>
    )
