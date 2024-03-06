@@ -74,9 +74,9 @@ class Product(models.Model):
     def size(self):
         return Size.objects.filter(product=self)
     
-    def save(self,*args, **kwargs):
-        self.rating = self.product_rating()
-        super(Product, self).save(*args, **kwargs)
+    # def save(self,*args, **kwargs):
+    #     self.rating = self.product_rating()
+    #     super(Product, self).save(*args, **kwargs)
 
 
 class Gallery(models.Model):

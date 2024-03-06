@@ -31,10 +31,10 @@ class ColorSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    gallery = GallerySerializer(many=True, read_only=True)
-    color = ColorSerializer(many=True, read_only=True)
-    size = SizeSerializer(many=True, read_only=True)
-    specification = SpecificationSerializer(many=True, read_only=True)
+    gallery = GallerySerializer(many=True)
+    color = ColorSerializer(many=True)
+    size = SizeSerializer(many=True)
+    specification = SpecificationSerializer(many=True)
     
     class Meta:
         model = Product
@@ -44,25 +44,16 @@ class ProductSerializer(serializers.ModelSerializer):
             "image",
             "description",
             "category",
-            "tags",
-            "brand",
             "price",
             "old_price",
             "shipping_amount",
             "stock_qty",
             "in_stock",
             "status",
-            "type",
             "featured",
-            "hot_deal",
-            "special_offer",
-            "digital",
             "views",
-            "orders",
-            "saved",
             "rating",
             "vendor",
-            "sku",
             "pid",
             "slug",
             "date",
@@ -72,8 +63,6 @@ class ProductSerializer(serializers.ModelSerializer):
             "color",
             "product_rating",
             "rating_count",
-            'order_count',
-            "get_precentage",
         ]
     
     def __init__(self, *args, **kwargs):
