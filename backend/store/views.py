@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from store.models import Category,Product
-from store.serializer import CartSerializer, ProductSerializer
+from store.serializer import CartSerializer, ProductSerializer,CategorySerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny 
 # Create your views here.
@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny
 
 class CategoryListAPIView(generics.ListAPIView):
     queryset=Category.objects.all()
-    serializer_class= CartSerializer
+    serializer_class= CategorySerializer
     permission_classes = [AllowAny]
 
 

@@ -43,7 +43,7 @@ class Product(models.Model):
     status = models.CharField(max_length=100, choices=STATUS, default="published")
     featured = models.BooleanField(default=False)
     views= models.PositiveIntegerField(default=0)
-    rating = models.PositiveIntegerField(default=0)
+    rating = models.PositiveIntegerField(default=0,null=True, blank=True)
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     pid = ShortUUIDField(unique=True, length=10, alphabet="abcdefg123456")
     slug = models.SlugField(unique=True)
@@ -74,9 +74,9 @@ class Product(models.Model):
     def size(self):
         return Size.objects.filter(product=self)
     
-    # def save(self,*args, **kwargs):
-    #     self.rating = self.product_rating()
-    #     super(Product, self).save(*args, **kwargs)
+    def save(self,*args, **kwargs):
+        self.rating = self.product_rating()
+        super(Product, self).save(*args, **kwargs)
 
 
 class Gallery(models.Model):
