@@ -156,7 +156,7 @@ function ProductDetail() {
                                         {size.map((s, index)=> (
                                         <div key={1} className='me-2'>
                                             <input type="hidden" className='size_name' value={s.name} />
-                                            <button className='btn btn-secondary size_button'>{s.name}</button>
+                                            <button key={index} className='btn btn-secondary size_button'>{s.name}</button>
                                         </div>
                                         ))}
                                        
@@ -174,7 +174,7 @@ function ProductDetail() {
                                         <div key={1}>
                                             <input type="hidden" className='color_name' value={1} />
                                             <input type="hidden" className='color_image' value={1} />
-                                            <button className='btn p-3 me-2 color_button' style={{ background: `${c.color_code}` }}></button>
+                                            <button key={index} className='btn p-3 me-2 color_button' style={{ background: `${c.color_code}` }}></button>
                                         </div>
                                         ))}
                                         
