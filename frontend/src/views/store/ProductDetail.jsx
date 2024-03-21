@@ -3,6 +3,8 @@ import apiInstance from '../../utils/axioxs'
 import { useParams } from 'react-router-dom'
 import GetCurrentAddress from '../plugin/UserCountry'
 import UserData from '../plugin/UserData'
+import CartID from '../plugin/CartID'
+
 
 function ProductDetail() {
 
@@ -28,6 +30,7 @@ function ProductDetail() {
     const currentAddress = GetCurrentAddress()
 
     const userData = UserData()
+    const cart_id = CartID()
     
 
 
@@ -67,6 +70,8 @@ function ProductDetail() {
         console.log(product.price)
         console.log(product.shipping_amount)
         console.log(userData?.user_id)
+        console.log(cart_id)
+
     }
 
 
