@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import apiInstance from '../../utils/axioxs'
 import { useParams } from 'react-router-dom'
 import GetCurrentAddress from '../plugin/UserCountry'
+import UserData from '../plugin/UserData'
+
 function ProductDetail() {
 
     const [product, setProduct] = useState({})
@@ -24,8 +26,9 @@ function ProductDetail() {
     const param = useParams()
 
     const currentAddress = GetCurrentAddress()
+
+    const userData = UserData()
     
-    console.log(currentAddress.country)
 
 
     useEffect(() => {
@@ -63,6 +66,7 @@ function ProductDetail() {
         console.log(currentAddress.country)
         console.log(product.price)
         console.log(product.shipping_amount)
+        console.log(userData?.user_id)
     }
 
 
