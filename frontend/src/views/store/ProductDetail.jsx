@@ -61,16 +61,39 @@ function ProductDetail() {
         setQtyValue(event.target.value)
     }
 
-    const handleAddToCart = () => {
-        console.log(qtyValue)
-        console.log(colorValue)
-        console.log(sizeValue)
-        console.log(product.id);
-        console.log(currentAddress.country)
-        console.log(product.price)
-        console.log(product.shipping_amount)
-        console.log(userData?.user_id)
-        console.log(cart_id)
+    const handleAddToCart =async () => {
+        // console.log(qtyValue)
+        // console.log(colorValue)
+        // console.log(sizeValue)
+        // console.log(product.id);
+        // console.log(currentAddress.country)
+        // console.log(product.price)
+        // console.log(product.shipping_amount)
+        // console.log(userData?.user_id)
+        // console.log(cart_id)
+
+        try {
+            const formdata = new FormData()
+
+            formdata.append("product_id", product.id)
+            formdata.append("user_id", userData?.user_id)
+            formdata.append("qty",qtyValue)
+            formdata.append("price", product.price)
+            formdata.append("shipping_amount", product.shipping_amount)
+            formdata.append("country", currentAddress.country)
+            formdata.append("size", sizeValue)
+            formdata.append("color", colorValue)
+            formdata.append("cart_id", cart_id)
+    
+            const response = await apiInstance.post(`cart-view/`,formdata)
+            console.log(response.data);
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
+
+       
 
     }
 
