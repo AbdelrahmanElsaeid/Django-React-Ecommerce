@@ -1,6 +1,22 @@
 import React, {useEffect,useState} from 'react'
 import apiInstance from '../../utils/axioxs'
 import { useNavigate, Link } from 'react-router-dom'
+import UserData from '../plugin/UserData'
+import GetCurrentAddress from '../plugin/UserCountry'
+import CartID from '../plugin/CartID'
+import Swal from 'sweetalert2'
+
+
+const Toast = Swal.mixin({
+  toast:"true",
+  position:"top",
+  showConfirmButton: false,
+  timer: 1500,
+
+  timerProgressBar: false
+})
+
+
 
 function Products() {
     const [products, setProducts]=useState([])
@@ -14,6 +30,12 @@ function Products() {
     const [selectedSize, setSelectedSize] = useState({})
 
     const [qtyValue, setQtyValue] = useState(1)
+
+
+    const currentAddress = GetCurrentAddress()
+
+    const userData = UserData()
+    const cart_id = CartID()
 
 
 
@@ -62,7 +84,33 @@ function Products() {
       })
   }, [] )
 
+  const handleAddToCart = async (product_id, product_price,product_shipping_amount) => {
+    try {
+      const formdata = new FormData()
 
+      formdata.append("product_id", product_id)
+      formdata.append("user_id", userData?.user_id)
+      formdata.append("qty",qtyValue)
+      formdata.append("price", product_price)
+      formdata.append("shipping_amount", product_shipping_amount)
+      formdata.append("country", currentAddress.country)
+      formdata.append("size", sizeValue)
+      formdata.append("color", colorValue)
+      formdata.append("cart_id", cart_id)
+
+      const response = await apiInstance.post(`cart-view/`,formdata)
+      console.log(response.data);
+
+      Toast.fire({
+        icon: "success",
+        title: response.data.message
+      })
+      
+  } catch (error) {
+      console.log(error)
+      
+  }
+  }
 
   return (
   <> 
@@ -174,6 +222,7 @@ function Products() {
                       <button
                         type="button"
                         className="btn btn-primary me-1 mb-1"
+                        onClick={() =>handleAddToCart(p.id, p.price, p.shipping_amount)}
                       >
                         <i className="fas fa-shopping-cart" />
                       </button>
