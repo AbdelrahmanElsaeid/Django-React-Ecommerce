@@ -23,6 +23,16 @@ function Cart() {
     const [cart, setCart]= useState([])
     const [cartTotal, setCartTotal]= useState([])
     const [productQuantities, setProductQuantities] = useState('')
+
+    const [fullname, setFullName]=useState('')
+    const [email, setEmail]=useState('')
+    const [mobile, setMobile]=useState('')
+    const [state, setState]=useState('')
+    const [address, setAddress]=useState('')
+    const [country, setFCountry]=useState('')
+    const [city, setCity]=useState('')
+
+
     const currentAddress = GetCurrentAddress()
 
 
@@ -127,6 +137,98 @@ console.log
       icon: "success",
       title: response.data.message
     })
+      
+
+    
+  }
+
+
+
+  const handleDeleteCartItem = async (item_id) => {
+    console.log(item_id)
+    const url = userData ?.user_id 
+        ?`cart-delete/${cart_id}/${item_id}/${userData?.user_id}/` 
+        : `cart-delete/${cart_id}/${item_id}/`
+
+    try {
+      await apiInstance.delete(url)
+      fetchCartData(cart_id, userData?.user_id)
+      fetchCartTotal(cart_id, userData?.user_id)
+      Toast.fire({
+        icon: "success",
+        title: "Item Removed from Cart"
+      })
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
+        
+      
+  }
+
+
+
+  const handleChange = (event) => {
+    const {name, value} = event.target
+
+    switch (name) {
+      case 'fullname':
+        setFullName(value)
+        break;
+      case 'email':
+        setEmail(value)
+        break;
+
+      case 'mobile':
+        setMobile(value)
+        break;  
+      case 'state':
+        setState(value)
+        break;
+      case 'address':
+        setAddress(value)
+        break;
+        
+      case 'city':
+        setCity(value)
+        break;  
+      
+      case 'country':
+      setFCountry(value)
+      break; 
+    
+      default:
+        break;
+    }
+
+  }
+
+
+  const createOrder = async () => {
+    if (!fullname || !email || !mobile || !address || !city || !country){
+      Swal.fire({
+        icon:  'warning',
+        title: "Missin Fields",
+        text: "All Fields are required before checkout!"
+      })
+    }
+
+    const formdata = new FormData()
+
+    formdata.append("full_name", fullname)
+    formdata.append("user_id", userData ? userData.user_id : 0)
+    formdata.append("email",email)
+    formdata.append("mobile", mobile)
+    formdata.append("address", address)
+    formdata.append("country", country)
+    formdata.append("state", state)
+    formdata.append("city", city)
+    formdata.append("cart_id", cart_id)
+
+    const response = await apiInstance.post(`create-order/`,formdata)
+    console.log(response.data);
+
   }
 
   return (
@@ -193,7 +295,7 @@ console.log
                         <span>Desphixs</span>
                       </p>
                       <p className="mt-3">
-                        <button className="btn btn-danger ">
+                        <button onClick={() =>handleDeleteCartItem(c.id)} className="btn btn-danger ">
                           <small><i className="fas fa-trash me-2" />Remove</small>
                         </button>
                       </p>
@@ -235,7 +337,8 @@ console.log
                         <input
                           type="text"
                           id=""
-                          name='fullName'
+                          name='fullname'
+                          onChange={handleChange}
                           className="form-control"
                         />
                       </div>
@@ -252,6 +355,7 @@ console.log
                           id="form6Example1"
                           className="form-control"
                           name='email'
+                          onChange={handleChange}
 
                         />
                       </div>
@@ -264,6 +368,7 @@ console.log
                           id="form6Example1"
                           className="form-control"
                           name='mobile'
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -280,6 +385,7 @@ console.log
                           id="form6Example1"
                           className="form-control"
                           name='address'
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -291,6 +397,7 @@ console.log
                           id="form6Example1"
                           className="form-control"
                           name='city'
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -303,6 +410,7 @@ console.log
                           id="form6Example1"
                           className="form-control"
                           name='state'
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -314,6 +422,7 @@ console.log
                           id="form6Example1"
                           className="form-control"
                           name='country'
+                          onChange={handleChange}
                         />
                       </div>
                     </div>
@@ -345,7 +454,7 @@ console.log
                     <span>Total </span>
                     <span>${cartTotal.total}</span>
                   </div>
-                  <button className="btn btn-primary btn-rounded w-100" >
+                  <button onClick={createOrder} className="btn btn-primary btn-rounded w-100" >
                     Got to checkout
                   </button>
                 </section>
