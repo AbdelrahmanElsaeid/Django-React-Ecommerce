@@ -17,5 +17,7 @@ urlpatterns = [
     path('cart-view/', store_views.CartAPIView.as_view()),
     path('cart-list/<str:cart_id>/<int:user_id>/', store_views.CartListView.as_view()),
     path('cart-list/<str:cart_id>/', store_views.CartListView.as_view()),
+    path('cart-detail/<str:cart_id>/<int:user_id>/', store_views.CartDetailView.as_view()),
+    path('cart-detail/<str:cart_id>/', store_views.CartDetailView.as_view()),
 
 ]
