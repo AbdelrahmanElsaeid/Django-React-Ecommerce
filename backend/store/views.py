@@ -85,7 +85,7 @@ class CartAPIView(generics.ListCreateAPIView):
             service_fee_percentage = 10 / 100
             cart.service_fee = Decimal(service_fee_percentage)  * cart.sub_total
 
-            cart.total =cart.sub_total + cart.shipping_amount + cart.tax_fee
+            cart.total =cart.sub_total + cart.shipping_amount + cart.tax_fee + cart.service_fee
             cart.save()
             return Response({'message': "Cart Updated Successfully"}, status=status.HTTP_200_OK)
 
@@ -107,7 +107,7 @@ class CartAPIView(generics.ListCreateAPIView):
             service_fee_percentage = 10 / 100
             cart.service_fee = Decimal(service_fee_percentage) * cart.sub_total
 
-            cart.total =cart.sub_total + cart.shipping_amount + cart.tax_fee
+            cart.total =cart.sub_total + cart.shipping_amount + cart.tax_fee + cart.service_fee
             cart.save()
             return Response({'message': "Cart Created Successfully"}, status=status.HTTP_201_CREATED)
 
@@ -308,5 +308,12 @@ class CreateOrderAPIView(generics.CreateAPIView):
         return Response({"message": "Order created successfully", "order_oid":order.oid}, status=status.HTTP_201_CREATED)     
 
 
+class CheckoutView(generics.RetrieveAPIView):
+    serializer_class= CartOrderSerializer
+    lookup_field ='order_oid'
 
+    def get_object(self):
+        order_oid = self.kwargs['order_oid']
+        order = CartOrder.objects.get(oid=order_oid)
+        return order
         

@@ -118,6 +118,7 @@ class CartOrderItemSerializer(serializers.ModelSerializer):
             self.Meta.depth = 3
 
 class CartOrderSerializer(serializers.ModelSerializer):
+    orderitem = CartOrderItemSerializer(many=True, read_only=True)
     class Meta:
         model = CartOrder
         fields = '__all__'

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import apiInstance from '../../utils/axioxs'
 import UserData from '../plugin/UserData'
 import CartID from '../plugin/CartID'
@@ -34,6 +34,8 @@ function Cart() {
 
 
     const currentAddress = GetCurrentAddress()
+
+    const navigate = useNavigate()
 
 
     const userData = UserData()
@@ -212,22 +214,32 @@ console.log
         title: "Missin Fields",
         text: "All Fields are required before checkout!"
       })
+    } else{
+
+    try {
+      const formdata = new FormData()
+
+      formdata.append("full_name", fullname)
+      formdata.append("user_id", userData ? userData.user_id : 0)
+      formdata.append("email",email)
+      formdata.append("mobile", mobile)
+      formdata.append("address", address)
+      formdata.append("country", country)
+      formdata.append("state", state)
+      formdata.append("city", city)
+      formdata.append("cart_id", cart_id)
+
+      const response = await apiInstance.post(`create-order/`,formdata)
+      console.log(response.data);
+
+      navigate(`/checkout/${response.data.order_oid}/`)
+      
+    } catch (error) {
+      console.log(error)
+      
     }
 
-    const formdata = new FormData()
-
-    formdata.append("full_name", fullname)
-    formdata.append("user_id", userData ? userData.user_id : 0)
-    formdata.append("email",email)
-    formdata.append("mobile", mobile)
-    formdata.append("address", address)
-    formdata.append("country", country)
-    formdata.append("state", state)
-    formdata.append("city", city)
-    formdata.append("cart_id", cart_id)
-
-    const response = await apiInstance.post(`create-order/`,formdata)
-    console.log(response.data);
+  }
 
   }
 
