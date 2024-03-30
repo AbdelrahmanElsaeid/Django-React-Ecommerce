@@ -1,23 +1,59 @@
 import React, {useEffect,useState} from 'react'
 import apiInstance from '../../utils/axioxs'
 import { useParams,useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 
 
 function Checkout() {
 
     const [order, setOrder] = useState([])
+    const [couponCode, setCouponCode]= useState("")
 
     const param = useParams()
-    console.log(param.order_oid)
+
+    const fetchOrderData = () => {
+      apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
+        //console.log (res.data)
+        setOrder(res.data)
+    })
+
+    }
 
     useEffect(() => {
-        apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
-            console.log (res.data)
-            setOrder(res.data)
-        })
+      fetchOrderData()
+        
     },[])
 
+
+
+      const applyCoupon = async () => {
+        const formdata = new FormData()
+
+        formdata.append("coupon_code", couponCode)
+        formdata.append("order_oid", order.oid)
+
+        try {
+          const response = await apiInstance.post(`coupon/`, formdata)
+          console.log (response.data.message)
+          Swal.fire({
+            icon: response.data.icon,
+            title: response.data.message
+          })
+          fetchOrderData()
+        
+          
+        } catch (error) {
+
+          console.log(error)
+          
+        }
+
+
+
+        
+
+      }
 
 
   return (
@@ -149,6 +185,12 @@ function Checkout() {
                             <span>Servive Fee </span>
                             <span>${order.service_fee}</span>
                             </div>
+                            {order.saved !== "0.00" &&
+                            <div className="d-flex text-danger fw-bold justify-content-between">
+                            <span>Discount </span>
+                            <span>-${order.saved}</span>
+                            </div>
+                            }
                             <hr className="my-4" />
                             <div className="d-flex justify-content-between fw-bold mb-5">
                             <span>Total </span>
@@ -156,8 +198,8 @@ function Checkout() {
                             </div>
 
                                 <div className="shadow p-3 d-flex mt-4 mb-4">
-                                    <input readOnly value={1} name="couponCode" type="text" className='form-control' style={{ border: "dashed 1px gray" }} placeholder='Enter Coupon Code' id="" />
-                                    <button className='btn btn-success ms-1'><i className='fas fa-check-circle'></i></button>
+                                    <input onChange={(e) => setCouponCode(e.target.value)}  name="couponCode" type="text" className='form-control' style={{ border: "dashed 1px gray" }} placeholder='Enter Coupon Code' id="" />
+                                    <button onClick={applyCoupon} className='btn btn-success ms-1'><i className='fas fa-check-circle'></i></button>
                                 </div>
 
                                 <form action={`http://127.0.0.1:8000/stripe-checkout/ORDER_ID/`} method='POST'>
