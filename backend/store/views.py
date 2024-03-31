@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from store.models import Category,Product,Cart,Tax,CartOrder,CartOrderItem,Coupon
 from store.serializer import CartSerializer, ProductSerializer,CategorySerializer,CartOrderSerializer,CouponSerializer
 from rest_framework import generics,status
@@ -6,9 +6,11 @@ from rest_framework.permissions import AllowAny
 from userauths.models import User
 from decimal import Decimal
 from rest_framework.response import Response
+import stripe
+from django.conf import settings
 # Create your views here.
 
-
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class CategoryListAPIView(generics.ListAPIView):
     queryset=Category.objects.all()
@@ -366,5 +368,89 @@ class CouponAPIView(generics.CreateAPIView):
         else:
             return Response({"message":"Coupon Does Not Exists", "icon":"error"}, status=status.HTTP_200_OK)
     
+
+
+
+class StripeCheckoutView(generics.CreateAPIView):
+    serializer_class =CartOrderSerializer
+    queryset = CartOrder.objects.all()
+    permission_classes = [AllowAny,]
+
+
+
+    def create(self,*args, **kwargs):
+        order_oid = self.kwargs['order_oid']
+        order = CartOrder.objects.get(oid=order_oid)
+
+        if not order:
+            return Response({"message":"Order Not Found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            checkout_session =stripe.checkout.Session.create(
+                customer_email = order.email,
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price_data':{
+                            'currency':'usd',
+                            'product_data':{
+                                'name':order.full_name,
+                            },
+                            'unit_amount': int(order.total * 100)
+                        },
+                        'quantity':1,
+                    }
+                ],
+                mode='payment',
+                success_url ='http://localhost:5173/payment-success/' + order.oid + '?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url ='http://localhost:5173/payment-failed/?session_id={CHECKOUT_SESSION_ID'
+
+            )
+
+            order.stripe_session_id = checkout_session.stripe_id
+            order.save()
+
+            return redirect(checkout_session.url)
+        except stripe.error.StripeError as e:
+            return Response({"error": f"Something went wrong while creating the checkout session: {str(e)}"})
+
+
+class PaymentSuccessView(generics.CreateAPIView):
+    serializer_class =CartOrderSerializer
+    queryset = CartOrder.objects.all()
+    permission_classes = [AllowAny,]
+
+
+    def create(self, request, *args, **kwargs):
+        payload = request.data
+
+        order_oid =payload['order_oid']
+        session_id = payload['session_id']
+
+        order = CartOrder.objects.get(oid=order_oid)
+
+        order_items = CartOrderItem.objects.filter(order=order)
+
+        if session_id != 'null':
+            session = stripe.checkout.Session.retrieve(session_id)
+
+            if session.payment_status == "paid":
+                if order.payment_status == "pending":
+                    order.payment_status = "paid"
+                    order.save()
+
+                    #send email & notification
+                    return Response({"message":"Payment Successfull"})
+                else:
+                    return Response({"message":"Already Paid"})
+
+            elif session.payment_status == "unpaid":
+                return Response({"message":"Your Invoice is Unpaid"}) 
+            elif session.payment_status == "cancelled":
+                return Response({"message":"Your Invoice was canceled"})
+            else:
+                return Response({"message":"An Error Occured, Try Again..."})
+        else:
+            session = None     
 
 
