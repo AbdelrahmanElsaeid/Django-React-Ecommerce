@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/auth'
 
 
@@ -12,6 +12,18 @@ function StoredHeader() {
     ])
 
     console.log(isLoggedIn())
+
+    const [search, setSearch] = useState()
+
+    const handleSearchChange = (event) => {
+        setSearch(event.target.value)
+        console.log(search)
+    }
+    const navigate=useNavigate()
+
+    const handleSearchSubmit = (event) => {
+        navigate(`/search?query=${search}`)
+    }
 
 
   return (
@@ -56,8 +68,8 @@ function StoredHeader() {
 
             </ul>
             <div className="d-flex">
-                <input name='search' className="form-control me-2" type="text" placeholder="Search" aria-label="Search" />
-                <button className="btn btn-outline-success me-2" type="submit">Search</button>
+                <input name='search' onChange={handleSearchChange} className="form-control me-2" type="text" placeholder="Search" aria-label="Search" />
+                <button className="btn btn-outline-success me-2" type="button" onClick={handleSearchSubmit}>Search</button>
             </div>
             {/* <Link className="btn btn-primary me-2" to="/login">Login</Link>
             <Link className="btn btn-primary me-2" to="/register">Register</Link> */}
