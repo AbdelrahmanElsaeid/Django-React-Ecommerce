@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
-from store.models import Category,Product,Cart,Tax,CartOrder,CartOrderItem,Coupon
-from store.serializer import CartSerializer, ProductSerializer,CategorySerializer,CartOrderSerializer,CouponSerializer
+from store.models import Category,Product,Cart,Tax,CartOrder,CartOrderItem,Coupon,Notification,Review
+from store.serializer import CartSerializer, ProductSerializer,CategorySerializer,CartOrderSerializer,CouponSerializer,NotificationSerializer,ReviewSerializer
 from rest_framework import generics,status
 from rest_framework.permissions import AllowAny 
 from userauths.models import User
@@ -11,6 +11,22 @@ from django.conf import settings
 # Create your views here.
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def send_notification(user=None, vendor=None, order=None, order_item=None):
+    Notification.objects.create(
+        user=user,
+        vendor=vendor,
+        order=order,
+        order_item=order_item
+    )
+
+
+
+
+
+
+
 
 class CategoryListAPIView(generics.ListAPIView):
     queryset=Category.objects.all()
@@ -439,7 +455,15 @@ class PaymentSuccessView(generics.CreateAPIView):
                     order.payment_status = "paid"
                     order.save()
 
-                    #send email & notification
+                    #send notification to customers
+                    if order.buyer != None:
+                        send_notification(user=order.buyer, order=order)
+
+                    #send notification to vendor
+                    for o in order_items:
+                        send_notification(vendor=o.vendor, order=order, order_item=o)    
+    
+                   
                     return Response({"message":"Payment Successfull"})
                 else:
                     return Response({"message":"Already Paid"})
@@ -454,3 +478,37 @@ class PaymentSuccessView(generics.CreateAPIView):
             session = None     
 
 
+
+
+class ReviewListAPIView(generics.ListCreateAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes=[AllowAny,]
+
+
+    def get_queryset(self):
+        product_id = self.kwargs['product_id']
+
+        product=Product.objects.get(id=product_id)
+        reviews=Review.objects.filter(product=product)
+        return reviews
+    
+    def create(self,request,*args, **kwargs):
+        payload = request.data
+
+        user_id = payload['user_id']
+        product_id= payload['product_id']
+        rating = payload['rating']
+        review = payload['review']
+
+        user = User.objects.get(id=user_id)
+        product=Product.objects.get(id=product_id)
+
+
+        Review.objects.create(
+            user=user,
+            product=product,
+            rating=rating,
+            review=review,
+        )
+
+        return Response({"message":"Review Created Successfully"}, status=status.HTTP_201_CREATED)
