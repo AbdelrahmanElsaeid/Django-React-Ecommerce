@@ -1,10 +1,11 @@
-import React, {useEffect,useState} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import apiInstance from '../../utils/axioxs'
 import { useNavigate, Link } from 'react-router-dom'
 import UserData from '../plugin/UserData'
 import GetCurrentAddress from '../plugin/UserCountry'
 import CartID from '../plugin/CartID'
 import Swal from 'sweetalert2'
+import { CartContext } from '../plugin/Context'
 
 
 const Toast = Swal.mixin({
@@ -37,6 +38,7 @@ function Products() {
     const userData = UserData()
     const cart_id = CartID()
 
+    const [cartCount, setCartCount] = useContext(CartContext)
 
 
 
@@ -105,6 +107,13 @@ function Products() {
         icon: "success",
         title: response.data.message
       })
+      // fetch updated cart items
+      const url = userData ? `cart-list/${cart_id}/${userData?.user_id}/` : `cart-list/${cart_id}/`
+      apiInstance.get(url).then((res) => {
+        console.log(res.data)
+        setCartCount(res.data.length)
+      })
+      
       
   } catch (error) {
       console.log(error)

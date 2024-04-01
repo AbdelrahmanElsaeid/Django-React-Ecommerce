@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import apiInstance from '../../utils/axioxs'
 import { useParams } from 'react-router-dom'
 import GetCurrentAddress from '../plugin/UserCountry'
 import UserData from '../plugin/UserData'
 import CartID from '../plugin/CartID'
 import moment from "moment"
+import { CartContext } from '../plugin/Context'
+
 
 function ProductDetail() {
 
@@ -26,6 +28,8 @@ function ProductDetail() {
 
 
     const [pID,  setPID] = useState()
+
+    const [cartCount, setCartCount] = useContext(CartContext)
 
 
 
@@ -95,9 +99,17 @@ function ProductDetail() {
             formdata.append("size", sizeValue)
             formdata.append("color", colorValue)
             formdata.append("cart_id", cart_id)
+
+            // post request to add cart
     
-            const response = await apiInstance.post(`cart-view/`,formdata)
-            //console.log(response.data);
+            await apiInstance.post(`cart-view/`,formdata)
+
+            // fetch updated cart items
+            const url = userData ? `cart-list/${cart_id}/${userData?.user_id}/` : `cart-list/${cart_id}/`
+            apiInstance.get(url).then((res) => {
+              console.log(res.data)
+              setCartCount(res.data.length)
+            })
             
         } catch (error) {
             console.log(error)

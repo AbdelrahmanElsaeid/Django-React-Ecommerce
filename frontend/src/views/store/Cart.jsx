@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import apiInstance from '../../utils/axioxs'
 import UserData from '../plugin/UserData'
 import CartID from '../plugin/CartID'
 import Swal from 'sweetalert2'
 import GetCurrentAddress from '../plugin/UserCountry'
+import { CartContext } from '../plugin/Context'
 
 
 
@@ -40,6 +41,8 @@ function Cart() {
 
     const userData = UserData()
     const cart_id = CartID()
+    const [cartCount, setCartCount] = useContext(CartContext)
+
 
     const fetchCartData = (cartId,userId) =>{
 
@@ -47,6 +50,8 @@ function Cart() {
         apiInstance.get(url).then((res) => {
             console.log(res.data)
             setCart(res.data)
+            setCartCount(res.data.length)
+
         })
     }
 
