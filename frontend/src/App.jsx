@@ -24,7 +24,7 @@ import PrivateRoute from './layout/PrivateRoute'
 import MainWrapper from './layout/MainWrapper'
 import Orders from './views/customer/Orders'
 import OrederDetail from './views/customer/OrederDetail'
-
+import WishList from './views/customer/WishList'
 
 
 function App() {
@@ -69,6 +69,8 @@ function App() {
         <Route path='/customer/account/' element={<PrivateRoute><Account /></PrivateRoute>} />
         <Route path='/customer/order/' element={<PrivateRoute><Orders /></PrivateRoute>} />
         <Route path='/customer/order/:order_oid/' element={<PrivateRoute><OrederDetail /></PrivateRoute>} />
+        <Route path='/customer/wishlist/' element={<PrivateRoute><WishList /></PrivateRoute>} />
+
 
       </Routes>
 

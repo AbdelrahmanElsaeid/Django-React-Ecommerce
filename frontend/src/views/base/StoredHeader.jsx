@@ -46,7 +46,7 @@ function StoredHeader() {
                     </a>
                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><Link to={'/customer/account/'} className="dropdown-item"><i className='fas fa-user'></i> Account</Link></li>
-                        <li><Link className="dropdown-item" to={`/customer/orders/`}><i className='fas fa-shopping-cart'></i> Orders</Link></li>
+                        <li><Link className="dropdown-item" to={`/customer/order/`}><i className='fas fa-shopping-cart'></i> Orders</Link></li>
                         <li><Link className="dropdown-item" to={`/customer/wishlist/`}><i className='fas fa-heart'></i> Wishlist</Link></li>
                         <li><Link className="dropdown-item" to={`/customer/notifications/`}><i className='fas fa-bell fa-shake'></i> Notifications</Link></li>
                         <li><Link className="dropdown-item" to={`/customer/settings/`}><i className='fas fa-gear fa-spin'></i> Settings</Link></li>

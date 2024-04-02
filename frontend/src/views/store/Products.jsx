@@ -121,6 +121,28 @@ function Products() {
   }
   }
 
+  const addToWishlist = async (productId, userId) => {
+    try {
+      const formdata = new FormData()
+
+      formdata.append("product_id", productId)
+      formdata.append("user_id", userId)
+
+      const response = await apiInstance.post(`customer/wishlist/${userId}/`, formdata)
+
+      console.log(response.data)
+      Toast.fire({
+        icon: "success",
+        title: response.data.message
+      })
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
+}
+
+
   return (
   <> 
     <main className="mt-5">
@@ -244,6 +266,7 @@ function Products() {
                     </div>
                   </ul>
                   <button
+                    onClick={() => addToWishlist(p.id, userData?.user_id)}
                     type="button"
                     className="btn btn-danger px-3 me-1 ms-2"
                   >
