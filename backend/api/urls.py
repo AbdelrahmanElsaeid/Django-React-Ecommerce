@@ -3,12 +3,14 @@ from django.urls import path
 from userauths import views as userauths_views
 from rest_framework_simplejwt.views import TokenRefreshView
 from store import views as store_views
+from customer import views as customer_views
 urlpatterns = [
     path('user/token/', userauths_views.MyTokenOptainPairView.as_view()),
     path('user/token/refresh/', TokenRefreshView.as_view()),
     path('user/register/', userauths_views.RegisterView.as_view()),
     path('user/password-reset/<email>/', userauths_views.PasswordRestEmailVerify.as_view()),
     path('user/password-change/', userauths_views.PasswordChangeView.as_view()),
+    path('user/profile/<user_id>/', userauths_views.ProfileView.as_view()),
 
     # Store Endpoint
     path('category/', store_views.CategoryListAPIView.as_view()),
@@ -33,6 +35,11 @@ urlpatterns = [
 
     path('stripe-checkout/<order_oid>/',store_views.StripeCheckoutView.as_view()),
     path('payment-success/<order_oid>/',store_views.PaymentSuccessView.as_view()),
+
+    #Customer Endpoint
+
+    path('customer/orders/<user_id>/',customer_views.OrderAPIView.as_view()),
+    path('customer/orders/<user_id>/<order_oid>/',customer_views.OrderDetailAPIView.as_view()),
 
 
 

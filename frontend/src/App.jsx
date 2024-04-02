@@ -19,6 +19,13 @@ import { CartContext } from './views/plugin/Context'
 import CartID from './views/plugin/CartID'
 import UserData from './views/plugin/UserData'
 import apiInstance from './utils/axioxs'
+import Account from './views/customer/Account'
+import PrivateRoute from './layout/PrivateRoute'
+import MainWrapper from './layout/MainWrapper'
+import Orders from './views/customer/Orders'
+import OrederDetail from './views/customer/OrederDetail'
+
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -43,23 +50,27 @@ function App() {
     <CartContext.Provider value={[cartCount, setCartCount]}>
     <BrowserRouter>
     <StoredHeader />
-    <Routes>
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/logout' element={<Logout />} />
-      <Route path='/forget-password' element={<ForgetPassword />} />
-      <Route path='/create-new-password' element={<CreatePassword />} />
-      <Route path='/dashboard' element={<Dashboard />} />
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/logout' element={<Logout />} />
+        <Route path='/forget-password' element={<ForgetPassword />} />
+        <Route path='/create-new-password' element={<CreatePassword />} />
+        <Route path='/dashboard' element={<Dashboard />} />
 
 
-      <Route path='/' element={<Products />} />
-      <Route path='/product-detail/:slug' element={<ProductDetail />} />
-      <Route path='/cart' element={<Cart />} />
-      <Route path='/checkout/:order_oid/' element={<Checkout />} />
-      <Route path='/payment-success/:order_oid/' element={<PaymentSuccess />} />
-      <Route path='/search/' element={<Search />} />
+        <Route path='/' element={<Products />} />
+        <Route path='/product-detail/:slug' element={<ProductDetail />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/checkout/:order_oid/' element={<Checkout />} />
+        <Route path='/payment-success/:order_oid/' element={<PaymentSuccess />} />
+        <Route path='/search/' element={<Search />} />
 
-    </Routes>
+        <Route path='/customer/account/' element={<PrivateRoute><Account /></PrivateRoute>} />
+        <Route path='/customer/order/' element={<PrivateRoute><Orders /></PrivateRoute>} />
+        <Route path='/customer/order/:order_oid/' element={<PrivateRoute><OrederDetail /></PrivateRoute>} />
+
+      </Routes>
 
     <StoreFooter />
     </BrowserRouter>

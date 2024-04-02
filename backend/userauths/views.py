@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from .models import User, Profile
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializer import MyTokenObtainPairSerializer ,RegisterSerializer, UserSerializer
+from .serializer import MyTokenObtainPairSerializer ,RegisterSerializer, UserSerializer,ProfileSerializer
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
@@ -68,3 +68,19 @@ class PasswordChangeView(generics.CreateAPIView):
             return Response({"message": "Password Changed Successfully"}, status=status.HTTP_201_CREATED)
         else:
             return Response({"message": "User Does Not Exists"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+class ProfileView(generics.RetrieveAPIView):
+    serializer_class=ProfileSerializer
+    permission_classes = [AllowAny,]
+
+    def get_object(self):
+        user_id = self.kwargs['user_id']
+
+        user = User.objects.get(id=user_id)
+        profile = Profile.objects.get(user=user)
+
+        return profile
