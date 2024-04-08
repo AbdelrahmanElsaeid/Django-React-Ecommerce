@@ -5,6 +5,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from store import views as store_views
 from customer import views as customer_views
 urlpatterns = [
+    path('dj-rest-auth/google/', userauths_views.GoogleLogin.as_view(), name='google_login'),
+
     path('user/token/', userauths_views.MyTokenOptainPairView.as_view()),
     path('user/token/refresh/', TokenRefreshView.as_view()),
     path('user/register/', userauths_views.RegisterView.as_view()),
@@ -33,7 +35,7 @@ urlpatterns = [
 
     #payments
 
-    path('stripe-checkout/<order_oid>/',store_views.StripeCheckoutView.as_view()),
+    path('stripe-checkout/<order_oid>/<cart_id>/',store_views.StripeCheckoutView.as_view()),
     path('payment-success/<order_oid>/',store_views.PaymentSuccessView.as_view()),
 
     #Customer Endpoint

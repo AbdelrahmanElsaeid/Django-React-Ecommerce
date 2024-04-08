@@ -68,7 +68,9 @@ function Sidebar() {
             </li>
             <li className="list-group-item d-flex justify-content-between align-items-start">
               <div className="ms-2 me-auto">
-                <div className="fw-bold">Setting</div>
+                <div className="fw-bold">
+                <Link to='/customer/settings/' className="text-dark"> Setting</Link>
+                  </div>
               </div>
             </li>
           </ol>

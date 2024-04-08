@@ -396,7 +396,15 @@ class StripeCheckoutView(generics.CreateAPIView):
 
     def create(self,*args, **kwargs):
         order_oid = self.kwargs['order_oid']
+        cart_id = self.kwargs['cart_id']
+
+        print(f"cart id is----------{cart_id}")
         order = CartOrder.objects.get(oid=order_oid)
+
+        carts = Cart.objects.filter(cart_id=cart_id)
+
+        print(f"carts  is----------{carts}")
+
 
         if not order:
             return Response({"message":"Order Not Found"}, status=status.HTTP_404_NOT_FOUND)
@@ -425,6 +433,7 @@ class StripeCheckoutView(generics.CreateAPIView):
 
             order.stripe_session_id = checkout_session.stripe_id
             order.save()
+            carts.delete()
 
             return redirect(checkout_session.url)
         except stripe.error.StripeError as e:

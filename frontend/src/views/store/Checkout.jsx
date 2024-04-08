@@ -3,7 +3,8 @@ import apiInstance from '../../utils/axioxs'
 import { useParams,useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { SERVER_URL } from '../../utils/constants'
-
+import UserData from '../plugin/UserData'
+import CartID from '../plugin/CartID'
 
 
 function Checkout() {
@@ -11,6 +12,8 @@ function Checkout() {
     const [order, setOrder] = useState([])
     const [couponCode, setCouponCode]= useState("")
     const [paymentLoading , setPaymentLoading]= useState(false)
+    const userData = UserData()
+    const cart_id = CartID()
 
     const param = useParams()
 
@@ -218,7 +221,7 @@ function Checkout() {
 
                                 {/* {paymentLoading === false && */}
 
-                                    <form action={`${SERVER_URL}/api/v1/stripe-checkout/${order?.oid}/`} method='POST' >
+                                    <form action={`${SERVER_URL}/api/v1/stripe-checkout/${order?.oid}/${cart_id}/`} method='POST' >
                                         <button onClick={payWithStripe} type="submit" className="btn btn-primary btn-rounded w-100 mt-2" style={{ backgroundColor: "#635BFF" }}>
                                           Pay With Stripe<i className='fas fa-credit-card'></i></button>
                                     </form>

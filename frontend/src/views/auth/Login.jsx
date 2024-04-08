@@ -2,7 +2,8 @@ import React, { useEffect, useState} from 'react'
 import { login } from '../../utils/auth'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/auth'
- 
+import apiInstance from '../../utils/axioxs'
+apiInstance 
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -41,6 +42,27 @@ function Login() {
         
 
     }
+
+    // const reachgeogle = () => {
+    //     const [ee, setEe] = useState()
+    //     const clientID = '172043223847-j6l8j4ch6o30rkt7ffjjltj7as438hcb.apps.googleusercontent.com';
+    //     const callBackURL= 'http://localhost:5173/';
+
+    //     window.location.replace(`https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURL}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`)
+
+
+    //     apiInstance.post(`dj-rest-auth/google/`).then((res) => {
+    //         setEe(res.data)
+    //         console.log('google', res.data)
+    //     })
+    // }
+
+    const reachgeogle = () => {
+        window.location.href = 'http://localhost:5173/dj-rest-auth/google/'; // Replace with your backend endpoint
+      };
+    
+
+
 
    return (
     <div>
@@ -108,6 +130,8 @@ function Login() {
 
                                             
 
+                                            
+
                                             <div className="text-center">
                                                 <p className='mt-4'>
                                                     Don't have an account? <Link to="/register">Register</Link>
@@ -117,6 +141,10 @@ function Login() {
                                                 </p>
                                             </div>
                                         </form>
+                                        <button className='btn btn-primary w-100' type="button" onClick={reachgeogle}>
+                                            <span className="mr-2">Sign with geogle </span>
+                                            <i className="fas fa-sign-in-alt" />
+                                            </button>
                                     </div>
                                 </div>
                             </div>

@@ -20,7 +20,7 @@ function Orders() {
 
     })
 
-    }, [])
+    },[])
 
     const statusCounts = orders.reduce((counts, order) => {
         const status = order.order_status
@@ -179,6 +179,8 @@ function Orders() {
                                 >
                                      View <i className="fas fa-eye" />
                                 </Link>
+
+                                <Link to= {`/customer/invoice/${o.oid}/`} className="btn btn-link btn-sm btn-rounded">Invoice <i className="fas fa-file-invoice" /></Link>
                             </td>
                             </tr>
                         ))}
