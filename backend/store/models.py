@@ -73,6 +73,8 @@ class Product(models.Model):
         return Color.objects.filter(product=self)
     def size(self):
         return Size.objects.filter(product=self)
+    def orders(self):
+        return CartOrderItem.objects.filter(product=self).count()
     
     def save(self,*args, **kwargs):
         self.rating = self.product_rating()
@@ -191,6 +193,8 @@ class CartOrder(models.Model):
     country = models.CharField(max_length=1000, null=True, blank=True)
 
     stripe_session_id = models.CharField(max_length=1000, null=True, blank=True)
+    cart_order_id = models.CharField(max_length=1000, null=True, blank=True)
+
     
     oid = ShortUUIDField(length=10, max_length=25, alphabet="abcdefghijklmnopqrstuvxyz")
     date = models.DateTimeField(default=timezone.now)

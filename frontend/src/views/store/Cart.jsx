@@ -233,6 +233,7 @@ console.log
       formdata.append("state", state)
       formdata.append("city", city)
       formdata.append("cart_id", cart_id)
+      formdata.append("cart_order_id", cart_id)
 
       const response = await apiInstance.post(`create-order/`,formdata)
       console.log(response.data);

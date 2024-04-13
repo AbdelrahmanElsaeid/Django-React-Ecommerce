@@ -3,7 +3,10 @@ import { login } from '../../utils/auth'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/auth'
 import apiInstance from '../../utils/axioxs'
-apiInstance 
+
+
+
+
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -43,26 +46,21 @@ function Login() {
 
     }
 
-    // const reachgeogle = () => {
-    //     const [ee, setEe] = useState()
-    //     const clientID = '172043223847-j6l8j4ch6o30rkt7ffjjltj7as438hcb.apps.googleusercontent.com';
-    //     const callBackURL= 'http://localhost:5173/';
+    const handleGoogleLogin = () => {
+        // Redirect user to Google OAuth endpoint
+        const clientID = "172043223847-j6l8j4ch6o30rkt7ffjjltj7as438hcb.apps.googleusercontent.com"
+        const callBackURL = "http://localhost:5173/"
 
-    //     window.location.replace(`https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURL}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`)
+        window.location.replace(`https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callBackURL}&prompt=consent&response_type=code&client_id=${clientID}&scope=openid%20email%20profile&access_type=offline`)
 
 
-    //     apiInstance.post(`dj-rest-auth/google/`).then((res) => {
-    //         setEe(res.data)
-    //         console.log('google', res.data)
-    //     })
-    // }
 
-    const reachgeogle = () => {
-        window.location.href = 'http://localhost:5173/dj-rest-auth/google/'; // Replace with your backend endpoint
-      };
+
+        // window.location.href = 'http://127.0.0.1:8000/accounts/google/login/';
+    };
     
 
-
+  
 
    return (
     <div>
@@ -141,7 +139,7 @@ function Login() {
                                                 </p>
                                             </div>
                                         </form>
-                                        <button className='btn btn-primary w-100' type="button" onClick={reachgeogle}>
+                                        <button className='btn btn-primary w-100' type="button" onClick={handleGoogleLogin}>
                                             <span className="mr-2">Sign with geogle </span>
                                             <i className="fas fa-sign-in-alt" />
                                             </button>

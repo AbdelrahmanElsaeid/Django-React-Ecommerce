@@ -3,7 +3,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import './App.css'
 import Login from './views/auth/Login'
 import Register from './views/auth/Register'
-import Dashboard from './views/auth/Dashboard'
+import Dashboard from './views/vendor/Dashboard'
 import Logout from './views/auth/Logout'
 import ForgetPassword from './views/auth/ForgetPassword'
 import CreatePassword from './views/auth/CreatePassword'
@@ -28,8 +28,14 @@ import WishList from './views/customer/WishList'
 import CustomerNotifications from './views/customer/CustomerNotifications'
 import Settings from './views/customer/Settings'
 import Invoice from './views/customer/Invoice'
-
-
+import ProductsV from './views/vendor/ProductsV'
+import OrdersV from './views/vendor/OrdersV'
+import OrdersDetail from './views/vendor/OrdersDetail'
+import Earning from './views/vendor/Earning'
+import Reviews from './views/vendor/Reviews'
+import ReviewDetail from './views/vendor/ReviewDetail'
+import Coupon from './views/vendor/Coupon'
+import EditCoupon from './views/vendor/EditCoupon'
 
 
 
@@ -62,7 +68,7 @@ function App() {
         <Route path='/logout' element={<Logout />} />
         <Route path='/forget-password' element={<ForgetPassword />} />
         <Route path='/create-new-password' element={<CreatePassword />} />
-        <Route path='/dashboard' element={<Dashboard />} />
+        {/* <Route path='/dashboard' element={<Dashboard />} /> */}
 
 
         <Route path='/' element={<Products />} />
@@ -79,6 +85,21 @@ function App() {
         <Route path='/customer/notifications/' element={<PrivateRoute><CustomerNotifications /></PrivateRoute>} />
         <Route path='/customer/settings/' element={<PrivateRoute><Settings /></PrivateRoute>} />
         <Route path='/customer/invoice/:order_oid' element={<PrivateRoute><Invoice /></PrivateRoute>} />
+
+
+        <Route path='/vendor/dashboard/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path='/vendor/products/' element={<PrivateRoute><ProductsV /></PrivateRoute>} />
+        <Route path='/vendor/orders/' element={<PrivateRoute><OrdersV /></PrivateRoute>} />
+        <Route path='/vendor/orders/:order_oid/' element={<PrivateRoute><OrdersDetail /></PrivateRoute>} />
+        <Route path='/vendor/earning/' element={<PrivateRoute><Earning /></PrivateRoute>} />
+        <Route path='/vendor/reviews/' element={<PrivateRoute><Reviews /></PrivateRoute>} />
+        <Route path='/vendor/reviews/:review_id/' element={<PrivateRoute><ReviewDetail /></PrivateRoute>} />
+        <Route path='/vendor/coupon/' element={<PrivateRoute><Coupon /></PrivateRoute>} />
+        <Route path='/vendor/coupon/:coupon_id/' element={<PrivateRoute><EditCoupon /></PrivateRoute>} />
+
+
+
+
 
 
 

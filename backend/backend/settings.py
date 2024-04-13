@@ -63,12 +63,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'dj_rest_auth.registration',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.twitter',
+    #'allauth.socialaccount.providers.facebook',
+    #'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.google',
 ]
 
-SITE_ID=1
+SITE_ID=2
 
 
 MIDDLEWARE = [

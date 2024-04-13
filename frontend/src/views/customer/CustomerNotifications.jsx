@@ -68,13 +68,13 @@ function CustomerNotifications() {
                                                 </h3>
                                                 <div className="list-group">
                                                     {notifications.map((noti, index) => (
-                                                        <a href="#" className="list-group-item list-group-item-action" aria-current="true" >
+                                                        <a key={index} href="#" className="list-group-item list-group-item-action" aria-current="true" >
                                                             <div className="d-flex w-100 justify-content-between">
                                                                 <h5 className="mb-1">New Order!</h5>
                                                                 <small>{moment(noti.date).format('MM-DD-YYYY')}</small>
                                                             </div>
                                                             <p className="mb-1">
-                                                                Your order #{noti?.order?.oid} was successfull
+                                                                Your order #{noti?.order?.oid} paid was successfull
                                                             </p>
                                                             <small className=''>Total: ${noti?.order?.total}</small> <br />
                                                             <small className=''>Shipping: ${noti?.order?.shipping_amount}</small> <br />

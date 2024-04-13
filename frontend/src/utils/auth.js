@@ -108,7 +108,7 @@ export const setAuthUser = (access_token, referesh_token) => {
 
 export const getRefreshToken = async () => {
     const referesh_token = Cookies.get("refresh_token")
-    const response = await axios.post('user/token/refresh',{
+    const response = await axios.post('user/token/refresh/',{
         refresh: referesh_token
     })
 
@@ -124,3 +124,39 @@ export const isAccessTokenExpired = async (accessToken) => {
         return true
     }
 }
+
+
+
+
+
+
+// export const googlelogin = async (code) => {
+//     const config ={
+//         headers: {
+//             "Content-Type": "application/json"
+
+//         }
+//     }
+
+//     const body = JSON.stringify({code})
+
+//     try {
+//         const res = await axios.post('http://127.0.0.1:8000/api/v1/dj-rest-auth/google/',body, config )
+
+//         dispatch({
+//             type: TypeError.LOGIN_SUCCESS,
+//             payload: res.data
+//         })
+
+
+        
+//     } catch (error) {
+//         console.log(error)
+//         dispatch({
+//             type: TypeError.LOGIN_FAIL
+//         })
+        
+//     }
+    
+            
+// }

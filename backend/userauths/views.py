@@ -10,7 +10,7 @@ import random
 import shortuuid
 
 # Create your views here.
-
+#http://127.0.0.1:8000/accounts/google/login/callback/
 
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
@@ -25,8 +25,23 @@ from dj_rest_auth.registration.views import SocialLoginView
 
 class GoogleLogin(SocialLoginView): # if you want to use Authorization Code Grant, use this
     adapter_class = GoogleOAuth2Adapter
-    callback_url = 'http://localhost:5173/'
-    client_class = OAuth2Client            
+    #callback_url = 'http://localhost:5173/'
+    callback_url = 'http://localhost:5173/google/callback/'  # Update with your actual callback URL
+
+    client_class = OAuth2Client  
+
+    def post(self, request, *args, **kwargs):
+        try:
+            self.adapter_class = GoogleOAuth2Adapter
+            self.callback_url = 'http://localhost:5173/google/callback/'
+            self.client_class = OAuth2Client
+            self.request = request
+            self.serializer = self.get_serializer(data=request.data)
+            self.serializer.is_valid(raise_exception=True)
+            self.login()
+            return Response(self.get_response_data(self.serializer.user), status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)          
 
 
 

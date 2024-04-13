@@ -63,6 +63,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "color",
             "product_rating",
             "rating_count",
+            "orders",
         ]
     
     def __init__(self, *args, **kwargs):
@@ -150,7 +151,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
     class Meta:
         model = Review
-        fields = ['id','profile','user','review','rating','date' ]
+        fields = ['id','profile','user','product','reply','review','rating','date' ]
 
     def __init__(self, *args, **kwargs):
         super(ReviewSerializer, self).__init__(*args, **kwargs)
@@ -206,3 +207,27 @@ class NotificationSerializer(serializers.ModelSerializer):
             self.Meta.depth = 0
         else:
             self.Meta.depth = 3
+
+
+class SummarySerializer(serializers.Serializer):
+    products = serializers.IntegerField()
+    orders = serializers.IntegerField()
+    revenue = serializers.DecimalField(max_digits=12, decimal_places=2)
+
+
+class EarningSerializer(serializers.Serializer):
+    monthly_revenue = serializers.DecimalField(max_digits=12, decimal_places=2)    
+    total_revenue = serializers.DecimalField(max_digits=12, decimal_places=2)    
+
+
+
+class CouponSummarySerializer(serializers.Serializer):
+    total_coupons = serializers.IntegerField(default=0)
+    active_coupons = serializers.IntegerField(default=0)    
+
+
+
+class NotificationSummarySerializer(serializers.Serializer):
+    un_read_noti = serializers.IntegerField(default=0)
+    read_noti = serializers.IntegerField(default=0)
+    all_noti = serializers.IntegerField(default=0)    

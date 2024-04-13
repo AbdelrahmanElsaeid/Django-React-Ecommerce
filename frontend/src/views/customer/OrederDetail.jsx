@@ -21,9 +21,13 @@ function OrederDetail() {
         apiInstance.get(`customer/orders/${userData?.user_id}/${param.order_oid}/`).then((res) => {
             setOrder(res.data)
             setOrderItems(res.data.orderitem)
+            console.log("order detail----" + res.data)
 
         })
     }, [])
+
+
+    
 
 
 
